@@ -257,19 +257,19 @@ jobs:
        - run:
            name: Get backend url and deploy frontend objects
            command: |
-             BACKEND_IP=`cat .circleci/ansible/inventory.txt`
+               BACKEND_IP=`cat .circleci/ansible/inventory.txt`
 #             export BACKEND_IP=$(aws ec2 describe-instances \
 #                              --filters Name=tag:Name,Values="backend-${CIRCLE_WORKFLOW_ID:0:7}" \
 #                              --query 'Reservations[*].Instances[*].{url:PublicIpAddress}' \
 #                              --output text) \
-             export API_URL="https://${BACKEND_IP}:3030"
-             echo "${API_URL}"
-             echo "${API_URL}" >> "frontend/.env"
-             cd frontend
-             npm i
-             npm run build
-             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
-             aws s3 sync dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}
+               export API_URL="https://${BACKEND_IP}:3030"
+               echo "${API_URL}"
+               echo "${API_URL}" >> "frontend/.env"
+               cd frontend
+               npm i
+               npm run build
+               tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+               aws s3 sync dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}
        - destroy-environment
        - revert-migrations
                     
