@@ -255,17 +255,16 @@ jobs:
        - attach_workspace:
            at: .
        - run:
-           name: Get backend url
+           name: Get backend url and deploy frontend objects
            command: |
-             export BACKEND_IP=$(aws ec2 describe-instances \
-                              --filters Name=tag:Name,Values="backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-                              --query 'Reservations[*].Instances[*].{url:PublicIpAddress}' \
-                              --output text) \
+             BACKEND_IP=`cat .circleci/ansible/inventory.txt`
+#             export BACKEND_IP=$(aws ec2 describe-instances \
+#                              --filters Name=tag:Name,Values="backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+#                              --query 'Reservations[*].Instances[*].{url:PublicIpAddress}' \
+#                              --output text) \
              export API_URL="https://${BACKEND_IP}:3030"
              echo "${API_URL}"
-       - run:
-           name: Deploy frontend objects
-           command: |
+             echo "${API_URL}" >> "frontend/.env"
              cd frontend
              npm i
              npm run build
